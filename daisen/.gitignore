@@ -1,3 +1,8 @@
 daisen
 __debug_bin
 sample_trace_medium.csv
+# Ignore all CSV files
+*.csv
+
+# Ignore all SQLite3 files
+*.sqlite3
