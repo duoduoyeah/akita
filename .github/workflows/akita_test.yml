@@ -75,8 +75,7 @@ jobs:
   akita_unit_test:
     name: Akita Unit Test
     needs: akita_compile
-    runs-on:
-      group: Github-Large-Runners
+    runs-on: ${{ github.repository == 'duoduoyeah/akita' && 'ubuntu-latest' || fromJSON('{"group":"Github-Large-Runners"}') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -94,8 +93,7 @@ jobs:
 
   noc_acceptance_test:
     name: NoC Acceptance Test
-    runs-on:
-      group: Github-Large-Runners
+    runs-on: ${{ github.repository == 'duoduoyeah/akita' && 'ubuntu-latest' || fromJSON('{"group":"Github-Large-Runners"}') }}
     needs: akita_unit_test
     steps:
       - name: Checkout
@@ -117,8 +115,7 @@ jobs:
 
   mem_acceptance_test:
     name: Mem Acceptance Test
-    runs-on:
-      group: Github-Large-Runners
+    runs-on: ${{ github.repository == 'duoduoyeah/akita' && 'ubuntu-latest' || fromJSON('{"group":"Github-Large-Runners"}') }}
     needs: akita_unit_test
     steps:
       - name: Checkout
