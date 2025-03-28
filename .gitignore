@@ -1,3 +1,5 @@
+examples/
+
 # IDE files
 .idea
 
@@ -25,3 +27,4 @@ debug
 .vscode/*.log
 
 __debug_bin*
+

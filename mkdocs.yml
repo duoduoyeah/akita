@@ -1,0 +1,52 @@
+site_name: Akita Unofficial Documentation
+
+repo_name: duoduoyeah/akita
+repo_url: https://github.com/duoduoyeah/akita
+
+# Copyright
+copyright: Copyright &copy; 2025 Scalable Architecture Lab
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+  icon:
+    repo: fontawesome/brands/git-alt 
+
+
+plugins:
+- search
+
+
+extra:
+  status:
+    new: Recently added
+    deprecated: Deprecated
+  social:
+    - icon: fontawesome/brands/golang
+      link: https://pkg.go.dev/gitlab.com/akita/akita
+
+
+nav:
+  - Home: index.md
+  - Guides: 
+    - Getting Started: guides/getting_started.md
+    - The Event System: guides/event_system.md
+    - The Component System: guides/component_system.md
+    - The Connection System: guides/connection_system.md
+    - The Hook System: guides/hook_system.md
+  - API Reference: # TODO: use godoc to generate the API reference
+    - Simulation: api/simulation.md
+    - Memory: api/memory.md
+    - Network: api/network.md
+  - Plugins:
+    - AkitaRTM: plugins/akitaRTM.md
+    - Daisen: plugins/daisen.md
+    - Trace: plugins/trace.md
+  - Development:
+    - Go Modules: dev/gomod.md
+    - Coding Guideline: dev/coding_guideline.md
+    - Testing: dev/testing.md
+  - Temp:
+    - Necessity: temp/necessity.md
+    - Examples: temp/examples.md

@@ -1,0 +1,2 @@
+## Necessity
+GPU Simulation aims to execute [workloads](workload.md) on specific [hardware configurations](guides/component_system.md) following defined [timing rules](guides/event_system.md) and [connection protocols](guides/connection_system.md).
