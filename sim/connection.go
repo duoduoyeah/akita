@@ -18,6 +18,8 @@ type Connection interface {
 	Unplug(port Port)
 	NotifyAvailable(port Port)
 
+	// GetPorts(currentPort Port) []Port
+
 	// V5: Add port information to NotifySend. Knowing the port is helpful
 	// for the wire implementation to notify the right destination.
 	NotifySend()

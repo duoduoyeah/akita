@@ -34,6 +34,11 @@ type Port interface {
 	AsRemote() RemotePort
 
 	SetConnection(conn Connection)
+	GetConnection() Connection
+	GetDst() []RemotePort
+	GetIncomingPorts() []RemotePort
+	GetOutgoingPorts() []RemotePort
+
 	Component() Component
 
 	// For connection
@@ -53,10 +58,12 @@ type Port interface {
 type defaultPort struct {
 	HookableBase
 
-	lock sync.Mutex
-	name string
-	comp Component
-	conn Connection
+	lock                sync.Mutex
+	name                string
+	comp                Component
+	conn                Connection
+	incomingRemotePorts []RemotePort
+	outgoingRemotePorts []RemotePort
 
 	incomingBuf Buffer
 	outgoingBuf Buffer
@@ -80,6 +87,58 @@ func (p *defaultPort) SetConnection(conn Connection) {
 	}
 
 	p.conn = conn
+}
+
+// return the connection
+func (p *defaultPort) GetConnection() Connection {
+	return p.conn
+}
+
+// return the destination ports
+func (p *defaultPort) GetDst() []RemotePort {
+
+	//DELETE FREE COMMENT BLOCK
+	// dst := append(p.incomingRemotePorts, p.outgoingRemotePorts...)
+	// if len(dst) == 0 {
+	// 	println(p.Name() + " dst port is 0")
+	// }
+	return append(p.incomingRemotePorts, p.outgoingRemotePorts...)
+}
+
+func (p *defaultPort) GetIncomingPorts() []RemotePort {
+	//DELETE FREE COMMENT BLOCK
+	// if len(p.incomingRemotePorts) == 0 {
+	// 	println(p.Name() + " Incoming dst port is 0")
+	// }
+	return p.incomingRemotePorts
+}
+
+func (p *defaultPort) GetOutgoingPorts() []RemotePort {
+	//DELETE FREE COMMENT BLOCK
+	// if len(p.outgoingRemotePorts) == 0 {
+	// 	println(p.Name() + " Outgoing dst port is 0")
+	// }
+	return p.outgoingRemotePorts
+}
+
+func (p *defaultPort) AddIncomingRemotePorts(remote RemotePort) {
+	// Check if already exists
+	for _, existing := range p.incomingRemotePorts {
+		if existing == remote {
+			return
+		}
+	}
+	p.incomingRemotePorts = append(p.incomingRemotePorts, remote)
+}
+
+func (p *defaultPort) AddOutgoingRemotePorts(remote RemotePort) {
+	// Check if already exists
+	for _, existing := range p.outgoingRemotePorts {
+		if existing == remote {
+			return
+		}
+	}
+	p.outgoingRemotePorts = append(p.outgoingRemotePorts, remote)
 }
 
 // Component returns the owner component of the port.
@@ -122,6 +181,7 @@ func (p *defaultPort) Send(msg Msg) *SendError {
 		Item:   msg,
 	}
 	p.InvokeHook(hookCtx)
+	p.AddOutgoingRemotePorts(msg.Meta().Dst)
 	p.lock.Unlock()
 
 	if wasEmpty {
@@ -148,6 +208,7 @@ func (p *defaultPort) Deliver(msg Msg) *SendError {
 		Item:   msg,
 	}
 	p.InvokeHook(hookCtx)
+	p.AddIncomingRemotePorts(msg.Meta().Src)
 
 	p.incomingBuf.Push(msg)
 	p.lock.Unlock()

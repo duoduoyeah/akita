@@ -76,6 +76,18 @@ func (c *Comp) NotifyAvailable(p sim.Port) {
 	c.TickNow()
 }
 
+// // return all ports
+// func (c *Comp) GetPorts(currentPort sim.Port) []sim.Port {
+// 	c.Lock()
+// 	defer c.Unlock()
+
+// 	ports := c.ports.list()
+// 	if ports == nil {
+// 		return []sim.Port{}
+// 	}
+// 	return ports
+// }
+
 // NotifySend is called by a port to notify that the connection can start
 // to tick now
 func (c *Comp) NotifySend() {

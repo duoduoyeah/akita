@@ -39,6 +39,13 @@ type Comp struct {
 	assembledMsgs      []sim.Msg
 }
 
+// func (c *Comp) GetPorts(currentPort sim.Port) []sim.Port {
+// 	var combinedPorts []sim.Port
+// 	combinedPorts = append(combinedPorts, c.NetworkPort)
+// 	combinedPorts = append(combinedPorts, c.DevicePorts...)
+// 	return combinedPorts
+// }
+
 // PlugIn connects a port to the endpoint.
 func (c *Comp) PlugIn(port sim.Port) {
 	port.SetConnection(c)
