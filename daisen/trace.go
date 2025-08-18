@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-	"sort"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -181,13 +180,6 @@ func (r *SQLiteTraceReader) ListComponents(ctx context.Context) []string {
 
 		components = append(components, component)
 	}
-
-	sort.Slice(components, func(i, j int) bool {
-		return naturalLess(components[i], components[j])
-	})
-
-	// fmt.Printf("%v\n", components)
-
 	return components
 }
 

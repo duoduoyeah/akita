@@ -18,6 +18,9 @@ var (
 	sqliteFileName = flag.String("sqlite",
 		"",
 		"Name of the SQLite file to read from.")
+	sqlite3FileName = flag.String("sqlite3",
+		"",
+		"Name of the SQLite file to read from (alias for --sqlite).")
 
 	traceReader *SQLiteTraceReader
 	fs          http.FileSystem
@@ -41,11 +44,15 @@ func startServer() {
 }
 
 func connectToDB() {
-	if *sqliteFileName == "" {
+	filename := *sqliteFileName
+	if filename == "" {
+		filename = *sqlite3FileName
+	}
+	if filename == "" {
 		panic("Must specify a SQLite file")
 	}
 
-	traceReader = NewSQLiteTraceReader(*sqliteFileName)
+	traceReader = NewSQLiteTraceReader(filename)
 	traceReader.Init()
 }
 

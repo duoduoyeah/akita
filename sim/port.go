@@ -34,7 +34,6 @@ type Port interface {
 	AsRemote() RemotePort
 
 	SetConnection(conn Connection)
-	GetConnection() Connection
 	GetDst() []RemotePort
 	GetIncomingPorts() []RemotePort
 	GetOutgoingPorts() []RemotePort
@@ -89,35 +88,16 @@ func (p *defaultPort) SetConnection(conn Connection) {
 	p.conn = conn
 }
 
-// return the connection
-func (p *defaultPort) GetConnection() Connection {
-	return p.conn
-}
-
 // return the destination ports
 func (p *defaultPort) GetDst() []RemotePort {
-
-	//DELETE FREE COMMENT BLOCK
-	// dst := append(p.incomingRemotePorts, p.outgoingRemotePorts...)
-	// if len(dst) == 0 {
-	// 	println(p.Name() + " dst port is 0")
-	// }
 	return append(p.incomingRemotePorts, p.outgoingRemotePorts...)
 }
 
 func (p *defaultPort) GetIncomingPorts() []RemotePort {
-	//DELETE FREE COMMENT BLOCK
-	// if len(p.incomingRemotePorts) == 0 {
-	// 	println(p.Name() + " Incoming dst port is 0")
-	// }
 	return p.incomingRemotePorts
 }
 
 func (p *defaultPort) GetOutgoingPorts() []RemotePort {
-	//DELETE FREE COMMENT BLOCK
-	// if len(p.outgoingRemotePorts) == 0 {
-	// 	println(p.Name() + " Outgoing dst port is 0")
-	// }
 	return p.outgoingRemotePorts
 }
 
