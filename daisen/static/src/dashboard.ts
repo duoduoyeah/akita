@@ -1,8 +1,6 @@
-import * as d3 from "d3";
+// import * as d3 from "d3";
 import Widget from "./widget";
-import { thresholdFreedmanDiaconis } from "d3";
-import { ChatPanel } from "./chatpanel";
-import { sendGetCheckEnvFile } from "./chatpanelrequests";
+// import { thresholdFreedmanDiaconis } from "d3";
 
 class YAxisOption {
   optionValue: string;
@@ -21,7 +19,7 @@ class Dashboard extends ChatPanel {
   _numCol: number;
   _currPage: number;
   _currFilter: string;
-  _filterTimer: NodeJS.Timeout;
+  _filterTimer: number;
   _primaryAxis: string;
   _secondaryAxis: string;
   _startTime: number;
@@ -75,16 +73,16 @@ class Dashboard extends ChatPanel {
     this._canvas = canvas;
     this._pageBtnContainer = pageBtnContainer;
     this._toolBar = toolBar;
-  
+
     this._canvas.classList.add('canvas-container');
-    
+
     if (this._burgerMenu) {
       this._burgerMenu.remove();
     }
     if (this._dropdownCanvas) {
       this._dropdownCanvas.remove();
     }
-    
+
     this._burgerMenu = document.createElement('div');
     this._burgerMenu.classList.add('burger-menu');
     this._burgerMenu.innerHTML = `
@@ -100,14 +98,16 @@ class Dashboard extends ChatPanel {
     this._dropdownCanvas.classList.add('dropdown-canvas');
     this._dropdownCanvas.style.display = 'none';
 
+    
+
     document.body.appendChild(this._burgerMenu);
     document.body.appendChild(this._dropdownCanvas);
-  
+
     this._burgerMenu.addEventListener('click', () => {
       const isActive = this._dropdownCanvas.classList.toggle('active');
       this._dropdownCanvas.style.display = isActive ? 'block' : 'none';
     });
-  
+
     window.addEventListener('resize', () => {
       this._updateNavbarVisibility();
       this._resize();
@@ -312,7 +312,7 @@ class Dashboard extends ChatPanel {
     };
     container.appendChild(btn);
   }
-  
+
   _addFilterUI(container: HTMLElement) {
     const filterGroup = document.createElement('div');
     filterGroup.classList.add('input-group', 'mr-3');
