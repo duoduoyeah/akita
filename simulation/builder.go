@@ -68,6 +68,7 @@ func (b Builder) Build() *Simulation {
 	}
 
 	s.visTracer = tracing.NewDBTracer(s.engine, s.dataRecorder)
+	s.messageTracer = tracing.NewMessageTracer(s.engine, s.dataRecorder)
 
 	return s
 }

@@ -9,11 +9,12 @@ import (
 
 // A Simulation provides the service requires to define a simulation.
 type Simulation struct {
-	id           string
-	engine       sim.Engine
-	dataRecorder datarecording.DataRecorder
-	monitor      *monitoring.Monitor
-	visTracer    *tracing.DBTracer
+	id            string
+	engine        sim.Engine
+	dataRecorder  datarecording.DataRecorder
+	monitor       *monitoring.Monitor
+	visTracer     *tracing.DBTracer
+	messageTracer *tracing.MessageTracer
 
 	components    []sim.Component
 	compNameIndex map[string]int
@@ -45,6 +46,11 @@ func (s *Simulation) GetMonitor() *monitoring.Monitor {
 // GetVisTracer returns the tracer used in the simulation.
 func (s *Simulation) GetVisTracer() *tracing.DBTracer {
 	return s.visTracer
+}
+
+// GetVisTracer returns the visualization tracer used in the simulation.
+func (s *Simulation) GetMsgTracer() *tracing.MessageTracer {
+	return s.messageTracer
 }
 
 // Components returns all the components registered in the simulation. The

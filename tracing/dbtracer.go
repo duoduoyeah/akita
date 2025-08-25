@@ -27,16 +27,6 @@ type milestoneTableEntry struct {
 	Location string  `json:"location" akita_data:"index"`
 }
 
-type TopologyPortEntry struct {
-	Port      string `json:"port" akita_data:"unique"`
-	Component string `json:"component" akita_data:"index"`
-}
-
-type PortConnectionEntry struct {
-	SourcePort      string `json:"from_port" akita_data:"index"` // Source port ID
-	DestinationPort string `json:"to_port" akita_data:"index"`   // Destination port ID
-}
-
 // DBTracer is a tracer that can store tasks into a database.
 // DBTracers can connect with different backends so that the tasks can be stored
 // in different types of databases (e.g., CSV files, SQL databases, etc.)
@@ -206,39 +196,6 @@ func (t *DBTracer) Terminate() {
 	t.backend.Flush()
 }
 
-// Add topology port map to the topology_ports table
-func (t *DBTracer) AddTopologyPortMap(components []sim.Component) {
-	for _, component := range components {
-		componentName := component.Name()
-		ports := component.Ports()
-
-		for _, port := range ports {
-			// Insert port info into topology_ports table
-			portEntry := TopologyPortEntry{
-				Port:      port.Name(),
-				Component: componentName,
-			}
-			t.backend.InsertData("topology_ports", portEntry)
-
-			// Insert port connections into ports_connection table
-			for _, incoming := range port.GetIncomingPorts() {
-				connEntry := PortConnectionEntry{
-					SourcePort:      string(incoming),
-					DestinationPort: port.Name(),
-				}
-				t.backend.InsertData("ports_connection", connEntry)
-			}
-			for _, outgoing := range port.GetOutgoingPorts() {
-				connEntry := PortConnectionEntry{
-					SourcePort:      port.Name(),
-					DestinationPort: string(outgoing),
-				}
-				t.backend.InsertData("ports_connection", connEntry)
-			}
-		}
-	}
-}
-
 // NewDBTracer creates a new DBTracer.
 func NewDBTracer(
 	timeTeller sim.TimeTeller,
@@ -246,8 +203,6 @@ func NewDBTracer(
 ) *DBTracer {
 	dataRecorder.CreateTable("trace", taskTableEntry{})
 	dataRecorder.CreateTable("trace_milestones", milestoneTableEntry{})
-	dataRecorder.CreateTable("topology_ports", TopologyPortEntry{})
-	dataRecorder.CreateTable("ports_connection", PortConnectionEntry{})
 
 	t := &DBTracer{
 		timeTeller:   timeTeller,

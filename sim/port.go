@@ -61,8 +61,8 @@ type defaultPort struct {
 	name                string
 	comp                Component
 	conn                Connection
-	incomingRemotePorts []RemotePort
-	outgoingRemotePorts []RemotePort
+	incomingRemotePorts map[RemotePort]struct{}
+	outgoingRemotePorts map[RemotePort]struct{}
 
 	incomingBuf Buffer
 	outgoingBuf Buffer
@@ -90,35 +90,44 @@ func (p *defaultPort) SetConnection(conn Connection) {
 
 // return the destination ports
 func (p *defaultPort) GetDst() []RemotePort {
-	return append(p.incomingRemotePorts, p.outgoingRemotePorts...)
+	var dst []RemotePort
+	for port := range p.incomingRemotePorts {
+		dst = append(dst, port)
+	}
+	for port := range p.outgoingRemotePorts {
+		dst = append(dst, port)
+	}
+	return dst
 }
 
 func (p *defaultPort) GetIncomingPorts() []RemotePort {
-	return p.incomingRemotePorts
+	var ports []RemotePort
+	for port := range p.incomingRemotePorts {
+		ports = append(ports, port)
+	}
+	return ports
 }
 
 func (p *defaultPort) GetOutgoingPorts() []RemotePort {
-	return p.outgoingRemotePorts
+	var ports []RemotePort
+	for port := range p.outgoingRemotePorts {
+		ports = append(ports, port)
+	}
+	return ports
 }
 
 func (p *defaultPort) AddIncomingRemotePorts(remote RemotePort) {
-	// Check if already exists
-	for _, existing := range p.incomingRemotePorts {
-		if existing == remote {
-			return
-		}
+	if p.incomingRemotePorts == nil {
+		p.incomingRemotePorts = make(map[RemotePort]struct{})
 	}
-	p.incomingRemotePorts = append(p.incomingRemotePorts, remote)
+	p.incomingRemotePorts[remote] = struct{}{}
 }
 
 func (p *defaultPort) AddOutgoingRemotePorts(remote RemotePort) {
-	// Check if already exists
-	for _, existing := range p.outgoingRemotePorts {
-		if existing == remote {
-			return
-		}
+	if p.outgoingRemotePorts == nil {
+		p.outgoingRemotePorts = make(map[RemotePort]struct{})
 	}
-	p.outgoingRemotePorts = append(p.outgoingRemotePorts, remote)
+	p.outgoingRemotePorts[remote] = struct{}{}
 }
 
 // Component returns the owner component of the port.
