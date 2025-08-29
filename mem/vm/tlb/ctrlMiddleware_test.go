@@ -28,11 +28,7 @@ var _ = Describe("TLB", func() {
 		bottomPort = NewMockPort(mockCtrl)
 		controlPort = NewMockPort(mockCtrl)
 
-		comp = MakeBuilder().
-			WithEngine(engine).
-			WithTranslationProviderMapperType("single").
-			WithTranslationProviders("RemotePort").
-			Build("TLB")
+		comp = MakeBuilder().WithEngine(engine).Build("TLB")
 		comp.topPort = topPort
 		comp.bottomPort = bottomPort
 		comp.controlPort = controlPort
