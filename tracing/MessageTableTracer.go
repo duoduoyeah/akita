@@ -8,7 +8,7 @@ import (
 	"github.com/tebeka/atexit"
 )
 
-type messageTableEntry struct {
+type MessageTableEntry struct {
 	ID           string  `json:"id" akita_data:"unique"`
 	Source       string  `json:"source" akita_data:"index"`
 	Destination  string  `json:"destination" akita_data:"index"`
@@ -40,7 +40,7 @@ func NewMessageTracer(
 	timeTeller sim.TimeTeller,
 	dataRecorder datarecording.DataRecorder,
 ) *MessageTracer {
-	dataRecorder.CreateTable("message_trace", messageTableEntry{})
+	dataRecorder.CreateTable("message_trace", MessageTableEntry{})
 	dataRecorder.CreateTable("topology_ports", TopologyPortEntry{})
 	dataRecorder.CreateTable("ports_connection", PortConnectionEntry{})
 
@@ -122,7 +122,7 @@ func (t *MessageTracer) DequeueMessage(rawMsg sim.Msg) {
 
 	msg.DequeueTime = t.timeTeller.CurrentTime()
 
-	entry := messageTableEntry{
+	entry := MessageTableEntry{
 		ID:           msg.ID,
 		Source:       msg.Source,
 		Destination:  msg.Destination,
@@ -141,7 +141,7 @@ func (t *MessageTracer) Terminate() {
 	defer t.mu.Unlock()
 
 	for _, msg := range t.tracingMessages {
-		entry := messageTableEntry{
+		entry := MessageTableEntry{
 			ID:           msg.ID,
 			Source:       msg.Source,
 			Destination:  msg.Destination,
