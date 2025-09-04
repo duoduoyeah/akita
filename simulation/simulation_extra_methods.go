@@ -1,3 +1,4 @@
+// This file is outdated and should be deleted later
 package simulation
 
 import (

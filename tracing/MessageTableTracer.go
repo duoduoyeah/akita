@@ -179,6 +179,9 @@ func (t *MessageTracer) AddTopologyPortMap(components []sim.Component) {
 				}
 				t.backend.InsertData("ports_connection", connEntry)
 			}
+
+			// 09-04-2025: the below should be valiated whether could be
+			//  commented out because of duplicates in table ports_connection
 			for _, outgoing := range port.GetOutgoingPorts() {
 				connEntry := PortConnectionEntry{
 					SourcePort:      port.Name(),
